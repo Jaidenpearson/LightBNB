@@ -16,18 +16,18 @@ CREATE TABLE properties (
   title VARCHAR(255) NOT NULL,
   description TEXT,
   thumbnail_photo_url VARCHAR(255) NOT NULL,
-  cover_photo_url VARCHAR(255),
-  
+  cover_photo_url VARCHAR(255) NOT NULL,
+
   cost_per_night INTEGER NOT NULL DEFAULT 0,
-  parking_spaces INTEGER DEFAULT 0,
-  number_of_bathrooms INTEGER DEFAULT 0,
-  number_of_bedrooms INTEGER DEFAULT 0,
+  parking_spaces INTEGER NOT NULL DEFAULT 0,
+  number_of_bathrooms INTEGER NOT NULL DEFAULT 0,
+  number_of_bedrooms INTEGER NOT NULL DEFAULT 0,
 
   country VARCHAR(255) NOT NULL,
   street VARCHAR(255) NOT NULL,
   city VARCHAR(255) NOT NULL,
   province VARCHAR(255) NOT NULL,
-  post_code VARCHAR(255),
+  post_code VARCHAR(255) NOT NULL,
 
   active BOOLEAN DEFAULT TRUE
 );
@@ -45,6 +45,6 @@ CREATE TABLE property_reviews (
   guest_id  INTEGER REFERENCES users(id) ON DELETE CASCADE,
   property_id INTEGER REFERENCES properties(id) ON DELETE CASCADE,
   reservation_id INTEGER REFERENCES reservations(id) ON DELETE CASCADE,
-  rating SMALLINT NOT NULL CHECK (rating >= 1 AND rating <= 5),
+  rating SMALLINT NOT NULL DEFAULT 0,
   message TEXT
 );
