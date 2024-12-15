@@ -27,11 +27,16 @@ router.post("/login", (req, res) => {
   const password = req.body.password;
 
   database.getUserWithEmail(email).then((user) => {
+
+  console.log("User object:", user);
+  console.log("Hashed password:", user.password);
+
     if (!user) {
       return res.send({ error: "no user with that id" });
     }
 
     if (!bcrypt.compareSync(password, user.password)) {
+      console.log('user password', user.password)
       return res.send({ error: "error" });
     }
 
