@@ -50,9 +50,13 @@ const getUserWithId = function (id) {
  */
 const addUser = function (user) {
   return pool
-    .query(`INSERT INTO users (id, name, email, password)
-      VALUES ($1, $2, $3, $4)
-      RETURNING *`, [user.name, user.email, user.password]
+    .query(`INSERT INTO users (name, email, password)
+      VALUES ($1, $2, $3)
+      RETURNING *`, [
+        user.name, 
+        user.email, 
+        user.password
+      ]
     ).then((result) => result.rows[0])
 };
 
@@ -150,11 +154,51 @@ const getAllProperties = function (options, limit = 10) {
  */
 const addProperty = function (property) {
   return pool
-    .query(`INSERT INTO properties (id, title, description, thumbnail_photo_url, cover_photo_url, cost_per_night, parking_spaces, number_of_bathrooms, number_of_bedrooms, country, street, city, province, post_code)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-      RETURNING *`, [property.title, property.description, property.thumbnail_photo_url, property.cover_photo_url, property.cost_per_night, property.parking_spaces, property.number_of_bathrooms, property.number_of_bedrooms, property.country, property.street, property.city, property.province, property.post_code]
-    ).then((result) => result.rows[0])
+    .query(
+      `INSERT INTO properties (
+        owner_id, 
+        title, 
+        description, 
+        thumbnail_photo_url, 
+        cover_photo_url, 
+        cost_per_night, 
+        street, 
+        city, 
+        province, 
+        post_code, 
+        country, 
+        parking_spaces, 
+        number_of_bathrooms, 
+        number_of_bedrooms
+      )
+      VALUES (
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14
+      )
+      RETURNING *;`,
+      [
+        property.owner_id,
+        property.title,
+        property.description,
+        property.thumbnail_photo_url,
+        property.cover_photo_url,
+        property.cost_per_night,
+        property.street,
+        property.city,
+        property.province,
+        property.post_code,
+        property.country,
+        property.parking_spaces,
+        property.number_of_bathrooms,
+        property.number_of_bedrooms,
+      ]
+    )
+    .then((result) => result.rows[0])
+    .catch((err) => {
+      console.error("Insert error:", err.message);
+      throw err;
+    });
 };
+
 
 module.exports = {
   getUserWithEmail,
