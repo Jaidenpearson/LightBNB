@@ -21,7 +21,6 @@ router.get("/reservations", (req, res) => {
 
   database
     .getAllReservations(userId)
-    .then((reservations) => console.log(reservations))
     .then((reservations) => res.send({ reservations }))
     .catch((e) => {
       console.error(e);
